@@ -35,7 +35,7 @@ jobs:
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
           task-definition: node-app-task.json
-          container-name: my-node-app
+          container-name:  test-node-app
           image: ${{ env.IMAGE_URI }}
 
       - name: Deploy to ECS
