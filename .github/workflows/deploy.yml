@@ -34,7 +34,7 @@ jobs:
       - name: Render ECS Task Definition
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: ecs-task-def.json
+          task-definition: node-app-task.json
           container-name: my-node-app
           image: ${{ env.IMAGE_URI }}
 
