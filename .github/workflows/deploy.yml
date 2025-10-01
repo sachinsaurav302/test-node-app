@@ -24,12 +24,15 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      - name: Build, Tag, and Push Docker image
-        run: |
-          IMAGE_URI=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-south-1.amazonaws.com/ecr-repo:v1
-          echo "Building image: $IMAGE_URI"
-          docker build -t $IMAGE_URI .
-          docker push $IMAGE_URI
+      - name: Build and push Docker image
+        uses: aws-actions/amazon-ecr-build-push@v2
+        with:
+          repository: ecr-repo
+          region: ap-south-1
+          image-tags: |
+           latest
+           ${{ github.sha }}
+
 
       - name: Deploy to ECS
         run: |
