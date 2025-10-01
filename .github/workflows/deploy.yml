@@ -26,7 +26,7 @@ jobs:
 
       - name: Build, Tag, and Push Docker image
         run: |
-          IMAGE_URI=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-south-1.amazonaws.com/ecr-repo:latest
+          IMAGE_URI=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-south-1.amazonaws.com/ecr-repo:v1
           echo "Building image: $IMAGE_URI"
           docker build -t $IMAGE_URI .
           docker push $IMAGE_URI
