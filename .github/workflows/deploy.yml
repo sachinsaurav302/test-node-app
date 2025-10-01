@@ -9,33 +9,34 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout code
+      # 1️⃣ Checkout repo
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # 2️⃣ Configure AWS
+      # 2️⃣ Configure AWS Credentials
       - name: Configure AWS
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ vars.AWS_REGION }}
+          aws-region: ap-south-1   # 👈 yaha hardcode kar diya (best for now)
 
-      # 3️⃣ Login to ECR
+      # 3️⃣ Login to Amazon ECR
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v2
 
       # 4️⃣ Build & Push Docker Image
       - name: Build and Push Docker Image
         run: |
-          IMAGE_URI=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com/${{ vars.ECR_REPOSITORY }}:latest
+          IMAGE_URI=${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.ap-south-1.amazonaws.com/node-repo1:latest
+          echo "IMAGE_URI=$IMAGE_URI"
           docker build -t $IMAGE_URI .
           docker push $IMAGE_URI
 
-      # 5️⃣ Update ECS Service (force new deployment)
+      # 5️⃣ Update ECS Service (Redeploy with new image)
       - name: Deploy to ECS
         run: |
           aws ecs update-service \
-            --cluster ${{ vars.ECS_CLUSTER }} \
-            --service ${{ vars.ECS_SERVICE }} \
+            --cluster my-ecs-cluster \
+            --service my-ecs-service \
             --force-new-deployment
