@@ -1,15 +1,31 @@
 {
-  "family": "my-task",
-  "containerDefinitions": [
+  "cpu": 0,
+  "environment": [],
+  "environmentFiles": [],
+  "essential": true,
+  "image": "559413642096.dkr.ecr.ap-south-1.amazonaws.com/new-node-repo",
+  "logConfiguration": {
+    "logDriver": "awslogs",
+    "options": {
+      "awslogs-group": "/ecs/new-task",
+      "awslogs-create-group": "true",
+      "awslogs-region": "ap-south-1",
+      "awslogs-stream-prefix": "ecs"
+    },
+    "secretOptions": []
+  },
+  "mountPoints": [],
+  "name": "new-node-container",
+  "portMappings": [
     {
-      "name": "my-app",                 
-      "image": "559413642096.dkr.ecr.ap-south-1.amazonaws.com/new-node-repo:latest", 
-      "memory": 512,                     
-      "cpu": 256,
-      "essential": true,
-      "portMappings": [
-        { "containerPort": 5050, "hostPort": 80 }
-      ]
+      "appProtocol": "http",
+      "containerPort": 5050,
+      "hostPort": 5050,
+      "name": "new-node-container-5050-tcp",
+      "protocol": "tcp"
     }
-  ]
+  ],
+  "systemControls": [],
+  "ulimits": [],
+  "volumesFrom": []
 }
