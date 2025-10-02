@@ -44,10 +44,11 @@ jobs:
           wait-for-service-stability: true
           image: $ECR_REGISTRY/${{ secrets.ECR_REPOSITORY }}:$IMAGE_TAG
 
+        # Deploy to ECS
       - name: Deploy to ECS
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
-          task-definition: ecs-task-def-updated.json
-          service: my-task-service
-          cluster: new-node-cluster
-          wait-for-service-stability: true
+         task-definition: ${{ steps.render-task-def.outputs.task-definition }}
+         service: my-task-service
+         cluster: new-node-cluster
+         wait-for-service-stability: true
