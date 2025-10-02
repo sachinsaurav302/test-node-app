@@ -1,31 +1,33 @@
 {
-  "cpu": 0,
-  "environment": [],
-  "environmentFiles": [],
-  "essential": true,
-  "image": "559413642096.dkr.ecr.ap-south-1.amazonaws.com/new-node-repo",
-  "logConfiguration": {
-    "logDriver": "awslogs",
-    "options": {
-      "awslogs-group": "/ecs/new-task",
-      "awslogs-create-group": "true",
-      "awslogs-region": "ap-south-1",
-      "awslogs-stream-prefix": "ecs"
-    },
-    "secretOptions": []
-  },
-  "mountPoints": [],
-  "name": "new-node-container",
-  "portMappings": [
+  "family": "new-task",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "256",
+  "memory": "512",
+  "executionRoleArn": "arn:aws:iam::559413642096:role/ecsTaskExecutionRole",
+  "containerDefinitions": [
     {
-      "appProtocol": "http",
-      "containerPort": 5050,
-      "hostPort": 5050,
-      "name": "new-node-container-5050-tcp",
-      "protocol": "tcp"
+      "name": "new-node-container",
+      "image": "559413642096.dkr.ecr.ap-south-1.amazonaws.com/new-node-repo",
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 5050,
+          "hostPort": 5050,
+          "protocol": "tcp",
+          "appProtocol": "http",
+          "name": "new-node-container-5050-tcp"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/new-task",
+          "awslogs-create-group": "true",
+          "awslogs-region": "ap-south-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      }
     }
-  ],
-  "systemControls": [],
-  "ulimits": [],
-  "volumesFrom": []
+  ]
 }
