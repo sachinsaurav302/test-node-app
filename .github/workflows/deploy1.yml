@@ -34,21 +34,21 @@ jobs:
           docker push $ECR_REGISTRY/${{ secrets.ECR_REPOSITORY }}:latest
           docker push $IMAGE_URI
 
-      # 5️⃣ Update ECS task definition (module)
-      - name: Deploy to ECS
-        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+     
+      - name: Render ECS task definition
+        id: render-task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: task_df.json     # local task definition file
-          service: my-task-service                 # ECS service name
-          cluster: new-node-cluster                  # ECS cluster name
-          wait-for-service-stability: true
-          image: $ECR_REGISTRY/${{ secrets.ECR_REPOSITORY }}:$IMAGE_TAG
+          task-definition: task_df.json        # existing local task definition
+          container-name: my-container         # container name from ECS task
+          image: $ECR_REGISTRY/${{ secrets.ECR_REPOSITORY }}:${{ github.sha }}
+
 
         # Deploy to ECS
       - name: Deploy to ECS
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
-         task-definition: ${{ steps.render-task-def.outputs.task-definition }}
-         service: my-task-service
-         cluster: new-node-cluster
-         wait-for-service-stability: true
+          task-definition: ${{ steps.render-task-def.outputs.task-definition }}
+          service: my-task-service
+          cluster: new-node-cluster
+          wait-for-service-stability: true
