@@ -40,7 +40,7 @@ jobs:
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
           task-definition: task_df.json        # existing local task definition
-          container-name: my-container         # container name from ECS task
+          container-name: new-node-container          # container name from ECS task
           image: $ECR_REGISTRY/${{ secrets.ECR_REPOSITORY }}:${{ github.sha }}
 
 
