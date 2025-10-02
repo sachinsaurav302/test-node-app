@@ -33,3 +33,13 @@ jobs:
           docker build -t $ECR_REGISTRY/${{ secrets.ECR_REPOSITORY }}:latest -t $IMAGE_URI .
           docker push $ECR_REGISTRY/${{ secrets.ECR_REPOSITORY }}:latest
           docker push $IMAGE_URI
+
+      # 5️⃣ Update ECS task definition (module)
+      - name: Deploy to ECS
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ecs-task-def.json     # local task definition file
+          service: my-ecs-service                 # ECS service name
+          cluster: my-ecs-cluster                 # ECS cluster name
+          wait-for-service-stability: true
+          image: $ECR_REGISTRY/${{ secrets.ECR_REPOSITORY }}:$IMAGE_TAG
