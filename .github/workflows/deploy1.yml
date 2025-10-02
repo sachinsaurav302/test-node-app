@@ -35,13 +35,15 @@ jobs:
           docker push $IMAGE_URI
 
      
+      
       - name: Render ECS task definition
         id: render-task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: task_df.json        # existing local task definition
-          container-name: new-node-container          # container name from ECS task
-          image: $ECR_REGISTRY/${{ secrets.ECR_REPOSITORY }}:${{ github.sha }}
+          task-definition: task_df.json
+          container-name: my-container
+          image: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:${{ github.sha }}
+
 
 
         # Deploy to ECS
