@@ -25,11 +25,13 @@ jobs:
 
       # 4️⃣ Build & Push Docker image (script)
       - name: Build and Push Docker Image
-        uses: aws-actions/amazon-ecr-build-and-push-image@v2
+        uses: docker/build-push-action@v5
         with:
-          repository: ${{ secrets.ECR_REPOSITORY }}      # ECR repository name
-          image-tag: ${{ github.sha }}                  # unique tag
-          region: ${{ secrets.AWS_REGION }}
+          context: .
+          push: true
+          tags: |
+            ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:latest
+            ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/${{ secrets.ECR_REPOSITORY }}:${{ github.sha }}
 
      
       
